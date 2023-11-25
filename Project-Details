@@ -1,0 +1,161 @@
+“ Important Notes “ :
+
+* Another computer on the same network must be with you.
+
+* Make sure the computers can reach each other, you can turn off the firewall as a shortcut. (Not recommended)
+
+* Elasticsearch, Kibana and Elastic Agent must be installed and ready on linux.
+
+— — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — —
+
+Summary of log collection on two computers on the same network with Elastic Agent :
+1- Checking if there is communication between two computers connected to the same network with ping.
+
+2- Before booting Linux, set network settings to “Bridge” and boot that way.
+
+3- Login to kibana with the browser of the computer connected to the same network as the IP of the wired settings.
+
+4- Install fleet server and elastic agent together on Windows.
+
+5- Collect Windows Logs to installed elastic agent and observe in Kibana Dashboard.
+
+6- Collect Windows Custom Event Logs with Powershell and observe with Kibana Discover and Dashboard.
+
+7- After completing everything, we can view the logs not only from the computer we are processing, but also from many other computers on the same network.
+
+----------------------------------------------------------------------------------
+
+- First of all, our first task will be to check whether there is communication between the two computers. We can see this with pinging.
+
+- Let’s open windows powershell and writing “ipconfig”.
+
+- Let’s ping our computer with the IP of the other party and do the same with the other computer.
+
+- After making sure that the communication between the two computers is established, let’s switch to Linux.
+
+- Before starting linux, let’s enable bridge in network settings and start linux.
+
+- Let’s start Linux.
+
+- Let’s open terminal and type “ifconfig” command.
+
+- Let’s connect to Kibana with our bridge IP.
+
+- Let’s go to the Fleet section and click “Add Fleet Server”
+
+- Let’s move on to the “Advanced” section in order not to encounter various errors.
+
+- Let’s create a policy as “Windows Policy 1” and don’t forget to select Windows to install Elastic agent and Fleet server in “Install Fleet Server to a centralized host”
+
+- Then let’s copy the codes in the Windows section and run Windows Powershell as an administrator.
+
+- Before pasting the copied codes into powershell, let’s set where the “.elastic-agent-8.8.1-windows-x86_64.zip” file will be downloaded and where it will be extracted as in the image.
+
+- Don’t forget to add , — — insecure
+
+- Then let’s run the codes, wait for the Elastic Agent and Fleet Server to be downloaded and installed.
+
+- After seeing the text “Elastic Agent has been succesfully installed”, we can continue…
+
+- And our Agent has arrived at the Fleet.
+
+- Lets Then click on “Agent Policies” and then “Add Integration”.
+
+- First, let’s add the “Windows” integration
+
+- Then, after clicking “Add Windows”, clicking “Existing hosts” at the bottom and selecting the “Windows Policy 1” we created, let’s continue.
+
+— — — — — — — — — — — — — — —
+
+“ Important Note ” :
+
+We can’t tag the integrations we choose to new hosts because it’s healthier if we tag them to policies that have agents in them so we can collect logs efficiently.
+
+— — — — — — — — — — — — — — —
+
+- As we can see our first Windows Logs came into our policy.
+
+- Now let’s go to our Kibana Dashboard and review our first Windows Logs we collected.
+
+- You can set the time calendar in the upper right “Last 1 hour or Last 90 days” and review it as well.
+
+- Now let’s go back to the Integrations and this time collect the “Custom Windows Event Logs”
+
+- Let’s click on “Custom Windows Event Logs” and paste the underlined code in the specified image into windows powershell running as administrator and run it.
+
+“ NOTE ” :
+
+We will add the logs path to the policy later, not now.
+
+— — — — — — — — — —
+
+- Let’s press the windows key on our keyboard and type “Event Viewer” in the search and click.
+
+- Now let’s go by clicking in order; Application and Service Logs -> Microsoft -> Windows -> WMI-Activity
+
+Step 1 ; Application and Service Logs
+
+Step 2 ; Microsoft
+
+Step 3 ; Windows
+
+Step 4 ; WMI-Activity
+
+- Let’s click on “WMI-Activity” then click on “Operational” inside it and see the channel of our logs.
+
+- Let’s copy the Channel in the specified image and continue by saying Add Custom Windows Event Logs…
+
+- Now let’s paste the channel path we copied into the “Channel Name” section and add the logs to our policy and go to the Dashboard.
+
+- Let’s examine our logs by typing windows on the Dashboard and clicking “Windows powershell Overvivew”.
+
+- After reviewing our logs, let’s go to “Discover”.
+
+- Let’s enter the code in the specified image in the Discover search section and update from the upper right corner.
+
+- After the update, you will see that the logs are coming to the “Documents” section under the bar graph below with the current time period.
+
+- Finally, let’s check from which computer the logs were collected and finish.
+
+- “host.hostname” as in the image specified in the “Available Fields” on the left. Let’s click on the field by typing it and finish it after we see our own host name.
+
+— — — — — — — — — —
+
+“ Final Note ” :
+
+We collected all of these logs with the other computer on the same network. We only got help from our main computer to access Elasticsearch and Kibana. You can view these logs on all computers on the same network.
+
+
+
+
+"Thanks for reading"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
